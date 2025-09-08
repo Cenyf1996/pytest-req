@@ -278,3 +278,14 @@ def session(base_url):
     yield session
 
     session.close()
+
+
+@pytest.fixture
+def req(base_url: str):
+    @request
+    def _request(method: str, url: str, **kwargs):
+        if (base_url is not None) and (url.startswith("http") is False):
+            url = base_url + url
+        return requests.request(method, url, **kwargs)
+
+    return _request

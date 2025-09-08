@@ -1,56 +1,17 @@
-def test_put_method(put):
+"""
+test req
+    pytest --base-url=https://httpbin.org
+"""
+
+def test_req_get(req):
     """
-    test put request
+    test req
     """
-    s = put('https://httpbin.org/put', data={'key': 'value'})
-    assert s.status_code == 200
+    req("GET", '/get', headers={'x-test2': 'true'}, params={'key': 'value'})
 
 
-def test_post_method(post):
+def test_req_post(req):
     """
-    test post request
+    test req
     """
-    s = post('https://httpbin.org/post', data={'key': 'value'})
-    assert s.status_code == 200
-
-
-def test_get_method(get):
-    """
-    test get request
-    """
-    payload = {'key1': 'value1', 'key2': 'value2'}
-    s = get("https://httpbin.org/get", params=payload)
-    assert s.status_code == 200
-
-
-def test_delete_method(delete):
-    """
-    test delete request
-    """
-    s = delete('https://httpbin.org/delete')
-    assert s.status_code == 200
-
-
-def test_patch_method(patch):
-    """
-    test patch request
-    """
-    data = {'key': 'value'}
-    s = patch("https://httpbin.org/patch", data=data)
-    assert s.status_code == 200
-
-
-def test_head_method(head):
-    """
-    test head request
-    """
-    s = head("https://httpbin.org/get")
-    assert s.status_code == 200
-
-
-def test_options_method(options):
-    """
-    test options request
-    """
-    s = options("https://httpbin.org/get")
-    assert s.status_code == 200
+    req("POST", '/post', headers={'x-test2': 'true'}, json={'key': 'value'})
