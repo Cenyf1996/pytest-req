@@ -10,6 +10,11 @@ class AssertInfo:
     warning = []
     error = []
 
+    @classmethod
+    def clear(cls):
+        cls.warning = []
+        cls.error = []
+
 
 def _all_values_are_same(input_list) -> bool:
     """
