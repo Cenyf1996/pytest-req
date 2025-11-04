@@ -40,3 +40,11 @@ def test_assert_path_value(get):
     """
     s = get("https://httpbin.org/get")
     expect(s).to_have_path_value("headers.Host", "httpbin.org")
+
+
+def test_assert_path_contains(get):
+    """
+    assert path value
+    """
+    s = get("https://httpbin.org/get")
+    expect(s).to_have_path_contains("headers.Host", "httpbin.")
