@@ -12,13 +12,12 @@
 
 > pytest requests plugin
 
-pytest 使用 requests 库的插件。
+pytest 使用 Requests 库的插件。完全兼容 Requests 库的使用。轻量级，非侵入。
 
 ## 特点
 
-* 完全兼容Requests库的使用。
-* 提供详细的`请求/响应`日志，并支持可配置。
-* 轻量级，非侵入。
+* 支持详细的`请求/响应`日志，并支持可配置。
+* 支持断言response 断言。
 
 ## 安装
 
@@ -46,12 +45,13 @@ pytest-req 完全兼容 [Requests](https://docs.python-requests.org/en/master/) 
 
 pytest-req 提供 `expect` 针对接口返回数据进行断言。
 
-| pytest-req(assert)                                                      | 说明                                         |
-|-------------------------------------------------------------------------|--------------------------------------------|
-| expect(response).to_be_ok()                                             | 状态码 200                                    |
-| expect(response).to_have_status_code(404)                               | 状态码等于 404                                  |
-| expect(response).to_have_json_matching(json_data, exclude=[])           | 断言JSON数据，exclude=[排查的字段列表]                 |
-| expect(response).to_have_path_value(path="headers.Host", value="value") | 断言提取的数据，是否等于value, 参考：https://jmespath.org |
+| pytest-req(assert)                                           | 说明                                           |
+|--------------------------------------------------------------|------------------------------------------------|
+| expect(s).to_be_ok()                                         | 状态码 200                                      |
+| expect(s).to_have_status_code(404)                           | 状态码等于 404                                   |
+| expect(s).to_have_json_matching(json_data, exclude=[])       | 断言JSON数据，exclude=[排查的字段列表]              |
+| expect(s).to_have_path_value("headers.Host", "httpbin.org")  | 提取的数据，断言是否等于, 参考：https://jmespath.org |
+| expect(s).to_have_path_contains("headers.Host", "httpbin")   | 提取的数据，断言是否包含, 参考：https://jmespath.org |
 
 👉︎ [查看测试](./tests)
 
