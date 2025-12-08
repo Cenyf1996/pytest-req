@@ -24,13 +24,13 @@ def formatting(msg):
 def request(func):
     def wrapper(*args, **kwargs):
         func_name = func.__name__
-        log.info('-------------- Request -----------------[🚀]')
-        if len(list(args)) == 1:
+        log.info('-------------- [📤] Request -----------------')
+
+        url = ""
+        if len(list(args)) == 1 and isinstance(args[0], str):
             url = list(args)[0]
-        elif len(list(args)) == 2:
-            url = list(args)[1]
-        else:
-            url = ""
+        elif len(list(args)) >= 2 and hasattr(args[0], 'base_url'):
+            url = args[0].base_url + list(args)[1]
 
         img_file = False
         file_type = url.split(".")[-1]
@@ -66,7 +66,7 @@ def request(func):
 
         ResponseResult.request = r.request
         ResponseResult.status_code = r.status_code
-        log.info("-------------- Response ----------------[🛬️]")
+        log.info("-------------- [📨] Response ----------------")
         if ResponseResult.status_code == 200 or ResponseResult.status_code == 304:
             log.info(f"successful with status {ResponseResult.status_code}")
         else:
