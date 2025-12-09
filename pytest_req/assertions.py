@@ -1,4 +1,5 @@
 import json
+import requests
 
 from pytest_req.log import log
 from pytest_req.utils.diff import  AssertInfo, diff_json
@@ -38,19 +39,21 @@ class Expect:
         :return:
         """
         log.info(f"👀 assert JSON -> {expected_json}.")
-        try:
-            actual_json = self.response.json()
-        except json.JSONDecodeError:
-            raise AssertionError("Response does not contain valid JSON")
+        actual_json = self.response
+        if isinstance(self.response, requests.Response):
+            try:
+                actual_json = self.response.json()
+            except json.JSONDecodeError:
+                raise AssertionError("Response does not contain valid JSON")
 
         AssertInfo.clear()
         diff_json(actual_json, expected_json, exclude)
-        if len(AssertInfo.warning) != 0:
-            log.warning(AssertInfo.warning)
-        if len(AssertInfo.error) != 0:
-            assert "Response data" == "Assert data", (
-                AssertInfo.error
-            )
+        if AssertInfo.warning:
+            for warn in AssertInfo.warning:
+                log.warning(warn)
+        if AssertInfo.error:
+            raise AssertionError(f"JSON mismatch:\n {AssertInfo.error}")
+
 
     def to_have_path_value(self, path, expected_value) -> None:
         """
@@ -61,10 +64,12 @@ class Expect:
         :return:
         """
         log.info(f"👀 assert path value -> {path} >> {expected_value}.")
-        try:
-            actual_json = self.response.json()
-        except json.JSONDecodeError:
-            raise AssertionError("Response does not contain valid JSON")
+        actual_json = self.response
+        if isinstance(self.response, requests.Response):
+            try:
+                actual_json = self.response.json()
+            except json.JSONDecodeError:
+                raise AssertionError("Response does not contain valid JSON")
 
         search_value = jmespath(actual_json, path)
         assert search_value == expected_value, (
@@ -80,10 +85,12 @@ class Expect:
         :return:
         """
         log.info(f"👀 assert path contains -> {path} >> {expected_value}.")
-        try:
-            actual_json = self.response.json()
-        except json.JSONDecodeError:
-            raise AssertionError("Response does not contain valid JSON")
+        actual_json = self.response
+        if isinstance(self.response, requests.Response):
+            try:
+                actual_json = self.response.json()
+            except json.JSONDecodeError:
+                raise AssertionError("Response does not contain valid JSON")
 
         search_value = jmespath(actual_json, path)
         if isinstance(search_value, (str, list, dict)):
