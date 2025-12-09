@@ -1,3 +1,8 @@
+## 0.5.1
+
+* 修复：使用`base_url`, 日志不显示完整的URL地址的问题。
+* 增强：`expect()` 断言方法不仅支持传Repsone对象，还支持`dict`、`list` 等。
+
 ## 0.5.0
 
 * 增加断言方法 `to_have_path_contains()`。
