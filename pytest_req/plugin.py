@@ -1,4 +1,6 @@
 import json
+import socket
+from urllib.parse import urlparse
 
 import pytest
 import requests
@@ -32,6 +34,10 @@ def request(func):
         elif len(list(args)) >= 2 and hasattr(args[0], 'base_url'):
             url = args[0].base_url + list(args)[1]
 
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc
+        ip_address = socket.gethostbyname(domain)
+
         img_file = False
         file_type = url.split(".")[-1]
         if file_type in IMG:
@@ -39,6 +45,7 @@ def request(func):
 
         req_method = func_name.replace("_", "")
         log.info(f"[method]: {req_method.upper()}      [url]: {url} ")
+        log.info(f"[IP]: {ip_address}")
         auth = kwargs.get("auth", None)
         headers = kwargs.get("headers", None)
         cookies = kwargs.get("cookies", None)
