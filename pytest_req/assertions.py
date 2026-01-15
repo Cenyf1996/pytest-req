@@ -100,6 +100,31 @@ class Expect:
         else:
             raise AssertionError(f"The value at path '{path}' is not a containable type (str/list/dict)")
 
+    def to_have_path_all_equal(self, path, expected_value) -> None:
+        """
+        Assert all values in list at path equal expected_value
+        """
+        log.info(f"👀 assert path all equal -> {path} == {expected_value}.")
+        actual_json = self.response
+        if isinstance(self.response, requests.Response):
+            try:
+                actual_json = self.response.json()
+            except json.JSONDecodeError:
+                raise AssertionError("Response does not contain valid JSON")
 
+        search_value = jmespath(actual_json, path)
+
+        if not isinstance(search_value, list):
+            raise AssertionError(f"The value at path '{path}' is not a list")
+
+        if not search_value:
+            log.info("ℹ️ list is empty, skip all-equal assertion")
+            return
+
+        for index, value in enumerate(search_value):
+            assert value == expected_value, (
+                f"Index {index}: expected {expected_value}, but got {value}"
+            )
+            
 def expect(response):
     return Expect(response)
